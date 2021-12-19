@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<unistd.h>
 #include<sys/syscall.h>
 int main(){
 	int ret;
@@ -9,5 +10,7 @@ int main(){
 		printf("rename successfully\n");
 	else
 		printf("rename failed\n");
+	// write(1, "hello", 7);
+	ret = syscall(SYS_write, 1, "world\n", 8);
 	return 0;
 }
