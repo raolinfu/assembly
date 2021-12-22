@@ -1,8 +1,21 @@
 #include<stdio.h>
+#include<string.h>
 #include<unistd.h>
 #include<time.h>
 
 int main(){
+	char* str = "Hello World\n";
+	long len = strlen(str);
+	int ret = 0;
+
+	__asm__("movq $1, %%rax \n\t"
+		"movq $1, %%rdi \n\t"
+		"movq %1, %%rsi \n\t"
+		"movl %2, %%edx \n\t"
+		"syscall"
+		: "=g"(ret)
+		: "g"(str), "g" (len));
+
 	time_t tt;
 	struct tm *t;
 	asm volatile(
@@ -14,19 +27,6 @@ int main(){
 	);
 	t = localtime(&tt);
 	printf("time:%d:%d:%d:%d:%d:%d\n", t->tm_year, t->tm_mon, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
-	write(1, "raolinhu\n", 15);
 
-	int fd = 1;
-	char str[]="hahahaha\n";
-	// char *str="hahahaha";
-	int n = 12;
-	int ret;
-	// printf("----------------");
-	asm volatile(
-		"int $0x80"
-		:"=a"(ret)
-		:"a"(1), "b"(1), "c"("linhu"), "d"(12)
-		// :"a"(1), "b"(1), "c"(str), "d"(12)
-	);
 	return 0;
 }
